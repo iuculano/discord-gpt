@@ -53,6 +53,7 @@ class Message:
     @property
     def content(self) -> str:
         return self._content
+
     @property
     def message(self) -> dict:
         return self._message
