@@ -14,6 +14,10 @@ class ThreadState:
         self._messages    = queue.Queue()
 
     @property
+    def directive(self) -> str:
+        return self._directive
+
+    @property
     def token_count(self) -> int:
         return self._token_count + 2
 
@@ -24,7 +28,7 @@ class ThreadState:
     @property
     def messages(self) -> list:
         message_buffer = []
-        message_buffer.append({'role': 'system', 'content': self._directive})
+        message_buffer.append({'role': 'system', 'content': self.directive.content})
         message_buffer.extend(list(self._messages.queue))
         return message_buffer
 
