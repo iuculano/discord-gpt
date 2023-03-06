@@ -19,14 +19,12 @@ def num_tokens_from_message(message: dict) -> int:
     '''
     total_tokens = 0
     for value in message.values():
-        # My best guess is 'im_start' + 'im_end' = 4 tokens
-        # It must not be counted like <im_start> or <|im_start|>?
-        # This isn't clearly documented at all...
-        total_tokens += num_tokens_from_string(value) + 4
+        total_tokens += num_tokens_from_string(value)
 
-    # I think this something from the API when it replies?
-    # token_count += 2
-    return total_tokens
+    # My best guess is 'im_start' + 'im_end' = 4 tokens
+    # It must not be counted like <im_start> or <|im_start|>?
+    # This isn't clearly documented at all...
+    return total_tokens + 4
 
 class RoleType:
     '''
