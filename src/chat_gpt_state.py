@@ -40,12 +40,13 @@ class ThreadState:
         '''
         # Push the message to the queue
         while message.token_count  + self.token_count > self.token_limit:
-            sacrifice              = self._pop()
-            sacrifice_tokens       = num_tokens_from_message(sacrifice.content)
-            self._token_count     -= sacrifice_tokens
+            sacrifice          = self._pop()
+            sacrifice_tokens   = num_tokens_from_message(sacrifice.content)
+            self._token_count -= sacrifice_tokens
 
         # Update the token count
         self._token_count += message.token_count
+        self._messages.put(message)
 
     def _pop(self) -> Message:
         '''
