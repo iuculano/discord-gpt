@@ -1,4 +1,3 @@
-import tiktoken
 import queue
 from   chat_gpt_messages import RoleType, Message, num_tokens_from_message
 
