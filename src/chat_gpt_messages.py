@@ -47,6 +47,13 @@ class Message:
         self._token_count = num_tokens_from_message(self.message)
 
     @property
+    def role(self) -> str:
+        return self._role
+
+    @property
+    def content(self) -> str:
+        return self._content
+    @property
     def message(self) -> dict:
         return self._message
 
