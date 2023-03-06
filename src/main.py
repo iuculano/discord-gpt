@@ -1,5 +1,5 @@
 import os
-import disnake
+import disnake, disnake.ext.commands
 import commands
 
 # Mandatory environment variables
@@ -24,5 +24,8 @@ async def prompt_image(interaction, prompt):
 async def start_chat(interaction, directive):
     await commands.start_chat(interaction, directive)
 
+@bot.event
+async def on_message(message):
+    await commands.on_message(message)
 
 bot.run(discord_token)
