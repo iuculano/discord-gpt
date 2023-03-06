@@ -46,7 +46,7 @@ class ThreadState:
 
         # Update the token count
         self._token_count += message.token_count
-        self._messages.put(message)
+        self._messages.put(message.message)
 
     def _pop(self) -> Message:
         '''
