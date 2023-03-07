@@ -7,17 +7,14 @@ class ThreadState:
     '''
     Wrapper around the state of a conversation thread.
     '''
-    def __init__(self, thread_id: int, directive: str):
-        self._last_updated = int(time.time())
+    def __init__(self, thread_id: int, directive: str, bot_id: int):
         self._thread_id    = thread_id
         self._directive    = Message(RoleType.SYSTEM, directive)
         self._token_count  = self.directive.token_count
         self._token_limit  = 4096 - self.directive.token_count # Since the context is permanent we can subtract it
         self._messages     = queue.Queue()
-
-    @property
-    def is_stale(self) -> int:
-        return int(time.time()) - self._last_updated > 3600
+        self._last_updated = int(time.time())
+        self._bot_id       = bot_id
 
     @property
     def directive(self) -> str:
@@ -37,6 +34,14 @@ class ThreadState:
         message_buffer.append({'role': 'system', 'content': self.directive.content})
         message_buffer.extend(list(self._messages.queue))
         return message_buffer
+
+    @property
+    def is_stale(self) -> int:
+        return int(time.time()) - self._last_updated > 3600
+
+    @property
+    def bot_id(self) -> int:
+        return self._bot_id
 
     def update(self, message: Message):
         '''

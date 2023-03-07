@@ -84,7 +84,11 @@ async def start_chat(
     # the first message. We keep of the current and previous token counts
     # to determine the delta between messages -
     directive                              = directive if directive else chatgpt_base_personality
-    chatgpt_global_thread_state[thread.id] = ThreadState(thread.id, directive)
+    chatgpt_global_thread_state[thread.id] = ThreadState(
+        thread_id = thread.id,
+        directive = directive,
+        bot_id    = interaction.bot.user.id
+    )
 
     # Clean up stale threads
     state: ThreadState
@@ -101,7 +105,7 @@ async def on_message(discord_message):
     # Threads that the bot started are tracked in the state
     # If we can match the channel id, we're talking in a bot thread
     state: ThreadState = chatgpt_global_thread_state.get(discord_message.channel.id)
-    if state and discord_message.author.name != 'ChatGPT':
+    if state and discord_message.author.id != state.bot_id:
         # Purge history to stay under the token limit, if needed
         # This counts the tokens for the user's message to ensure it fits on
         # the message queue - this isn't perfect but will true-up after the
