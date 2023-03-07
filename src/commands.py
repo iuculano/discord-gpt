@@ -1,6 +1,7 @@
 import os
 import openai
 import disnake
+from disnake.ext       import commands
 from chat_gpt_state    import ThreadState
 from chat_gpt_messages import RoleType, Message
 
@@ -17,7 +18,7 @@ chatgpt_global_thread_state = {}
 
 async def prompt_text(
     interaction: disnake.ApplicationCommandInteraction,
-    prompt: str
+    prompt:      str
 ):
     '''
     Slash command to make a one-off request to ChatGPT, optionally with a
@@ -39,7 +40,7 @@ async def prompt_text(
 
 async def prompt_image(
     interaction: disnake.ApplicationCommandInteraction,
-    prompt: str
+    prompt:      str
 ):
     await interaction.response.defer()
     response = openai.Image.create(
@@ -53,7 +54,7 @@ async def prompt_image(
 
 async def start_chat(
     interaction: disnake.ApplicationCommandInteraction,
-    directive: str = None
+    directive:   str
 ):
     '''
     Slash command to start a thread to use as a container for a conversation.
