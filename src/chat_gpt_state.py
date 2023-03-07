@@ -1,3 +1,4 @@
+import time
 import queue
 from   chat_gpt_messages import RoleType, Message, num_tokens_from_message
 
@@ -7,11 +8,16 @@ class ThreadState:
     Wrapper around the state of a conversation thread.
     '''
     def __init__(self, thread_id: int, directive: str):
-        self._thread_id   = thread_id
-        self._directive   = Message(RoleType.SYSTEM, directive)
-        self._token_count = self.directive.token_count
-        self._token_limit = 4096 - self.directive.token_count # Since the context is permanent we can subtract it
-        self._messages    = queue.Queue()
+        self._last_updated = int(time.time())
+        self._thread_id    = thread_id
+        self._directive    = Message(RoleType.SYSTEM, directive)
+        self._token_count  = self.directive.token_count
+        self._token_limit  = 4096 - self.directive.token_count # Since the context is permanent we can subtract it
+        self._messages     = queue.Queue()
+
+    @property
+    def is_stale(self) -> int:
+        return int(time.time()) - self._last_updated > 3600
 
     @property
     def directive(self) -> str:
@@ -41,7 +47,7 @@ class ThreadState:
         # Push the message to the queue
         while message.token_count  + self.token_count > self.token_limit:
             sacrifice          = self._pop()
-            sacrifice_tokens   = num_tokens_from_message(sacrifice.content)
+            sacrifice_tokens   = num_tokens_from_message(sacrifice)
             self._token_count -= sacrifice_tokens
 
         # Update the token count
