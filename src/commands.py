@@ -85,6 +85,13 @@ async def start_chat(
     directive                              = directive if directive else chatgpt_base_personality
     chatgpt_global_thread_state[thread.id] = ThreadState(thread.id, directive)
 
+    # Clean up stale threads
+    state: ThreadState
+    for state in chatgpt_global_thread_state.values():
+        if state.is_stale:
+            del chatgpt_global_thread_state[state.thread_id]
+            await interaction.edit_original_response('Cleaning up stale threads.')
+
     await interaction.edit_original_response('Registered.')
 
 async def on_message(discord_message):
