@@ -1,5 +1,5 @@
 # Discord ChatGPT Bot
-Extremely simple Discord bot for ChatGPT.
+Extremely simple Discord bot for ChatGPT and DALL-E.
 
 ## Getting started
 Create an OpenAI API key. You may need to put a card on file.
@@ -15,4 +15,10 @@ Create a Discord application.
 
 Set the `OPENAI_API_KEY` and `DISCORD_BOT_TOKEN` environment variables and run.
 
-This currently has a bug because it's 3:00 AM where it never cleans up internal state it keeps for chats after they're archived. This *may* cause problems at some unspecified point in the future.
+## Docker
+One of the easiest ways to run the bot is with Docker.
+
+```bash
+docker build . --tag discord-gpt:latest
+docker run -d -e OPENAI_API_KEY='KEY_HERE' -e DISCORD_BOT_TOKEN='TOKEN_HERE' discord-gpt:latest
+```
